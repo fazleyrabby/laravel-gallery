@@ -1,0 +1,17 @@
+{
+    "name": "fazleyrabby/laravel-gallery",
+    "description": "laravel gallery",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Rabbi\\LaravelGallery\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "fazleyrabby",
+            "email": "fazley111@gmail.com"
+        }
+    ],
+    "require": {}
+}
