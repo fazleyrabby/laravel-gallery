@@ -13,8 +13,14 @@ class LaravelGalleryProvider extends ServiceProvider
      */
     public function register()
     {
+        // $this->mergeConfigFrom(
+        //     __DIR__ . '/Config/config.php', 'gallery'
+        // );
         $this->app->make('Rabbi\LaravelGallery\LaravelGalleryController');
         $this->loadViewsFrom(__DIR__.'/views','laravel-gallery');
+        // config([
+        //     'config/gallery.php',
+        // ]);
     }
 
     /**
@@ -25,5 +31,8 @@ class LaravelGalleryProvider extends ServiceProvider
     public function boot()
     {
         include __DIR__ . '/routes.php';
+        $this->publishes([
+            __DIR__ . '/config/gallery.php' => config_path('gallery.php'),
+        ], 'gallery');
     }
 }
