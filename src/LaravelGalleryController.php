@@ -16,14 +16,8 @@ class LaravelGalleryController extends Controller
     {
         $search_query = $request->search_query;
         $status = 'active';
-        $media = LaravelGallery::select('id', 'url', 'created_at', 'status')
-            ->where('url', 'like', '%' . $search_query . '%')
-            ->when(!request()->has('search_query'), function ($query) use ($status) {
-                $query->where('status', $status);
-            })->orderBy('created_at', 'desc')->paginate(15);
-
-        $media->appends(['search_query' => $search_query, 'status' => $status]);
-
+        $paginateItems = 20;
+        $media = LaravelGallery::getImages($search_query, $status, $paginateItems);
         if ($request->ajax()) {
             // if($request->type == 'modal'){
             //     return view('admin.layouts.components.media-ajax-data', compact('media'));
@@ -69,18 +63,7 @@ class LaravelGalleryController extends Controller
             return Redirect::back()->with('danger', $messages);
         }
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $image = imageUpload($file);
-                $data[] =  [
-                    'url' => $image,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-        }
-
-        LaravelGallery::insert($data);
+        if ($request->hasFile('images')) LaravelGallery::storeImage($request->file('images'));
 
         return response()->json([
             'msg' => 'Media Successfully Updated!',
@@ -101,19 +84,8 @@ class LaravelGalleryController extends Controller
 
     public function destroy(Request $request)
     {
-        $ids = $request->image_ids;
         try {
-            if($request->type =='all'){
-                LaravelGallery::query()->delete();
-            }else{
-                $media = LaravelGallery::whereIn('id', $ids);
-                if ($media->exists()) {
-                    foreach ($media->get() as $image) {
-                        deleteFile($image->url);
-                    }
-                }
-                $media->delete();
-            }
+            LaravelGallery::deleteImage($request->image_ids, $request->type);
             $status = "success";
             $message = "Media files successfully deleted";
         } catch (\Illuminate\Database\QueryException $ex) {
