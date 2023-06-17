@@ -1,17 +1,4 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Laravel Gallery!</title>
-</head>
-<body>
-    <h3>Gallery Sample View!</h3>
-</body>
-</html> --}}
 @extends('laravel-gallery::layouts.master')
-
 @push('style')
     <link rel="stylesheet" href="{{ asset('https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css') }}">
     <link rel="stylesheet" href="{{ asset('https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/panzoom.css') }}">
@@ -73,89 +60,104 @@
     </style>
 @endpush
 @section('content')
-    <div class="row">
-        <section class="section">
-            <!-- Content Header (Page header) -->
-            {{-- @include('admin.includes.content_header', ['title' => 'Media']) --}}
-            <!-- /.content-header -->
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Gallery Modal
+</button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
             <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            @if (Session::has('danger') || Session::has('success'))
-                                <div class="alert alert-{{ Session::has('danger') ? 'danger' : 'success' }} alert-dismissible fade show"
-                                    role="alert">
-                                    {{ Session::get('success') ?? Session::get('danger') }}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @endif
-                            <div class="table-btn-actions align-items-center">
-                                <form class="ajaxform" action="{{ route('gallery.store') }}" method="post"
-                                    enctype="multipart/form-data" novalidate>
-                                    @csrf
-                                    <input type="file" name="images[]" id="media" multiple />
-                                    <button class="btn btn-primary ajaxbtn" type="submit">Upload</button>
-                                </form>
-
-                                <div class="d-flex" style="gap:10px">
-                                    <button type="button" class="btn btn-warning deleteBtn">Delete
-                                    </button>
-                                    <form id="deleteAll" action="{{ route('gallery.delete.all') }}" method="post"
-                                    enctype="multipart/form-data" novalidate>
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger deleteAll">Delete All
-                                    </form>
-                                </div>
-                            </div>
-
-                            {{-- @include('admin.layouts.components.datafilter', [
-                            // 'bulk_action_route' => route('admin.media.status'),
-                            'search_route' => url('admin/media'),
-                        ]) --}}
-
-                        </div>
-
-
-                        <div class="row">
-                            <div class="col-md-8">
-                                <section id="ajax_container">
-                                    {{-- ajax table  --}}
-                                    @if (count($media) > 0)
-                                        @include('laravel-gallery::item')
-                                    @else
-                                        <div style="text-align: center;">
-                                            <p>No data found!</p>
+                <section class="section">
+                    <!-- Content Header (Page header) -->
+                    {{-- @include('admin.includes.content_header', ['title' => 'Media']) --}}
+                    <!-- /.content-header -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    @if (Session::has('danger') || Session::has('success'))
+                                        <div class="alert alert-{{ Session::has('danger') ? 'danger' : 'success' }} alert-dismissible fade show"
+                                            role="alert">
+                                            {{ Session::get('success') ?? Session::get('danger') }}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
                                     @endif
-                                </section>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="p-4">
-                                    <div class="preview mb-3">
-                                        <img class="preview-img" src="https://via.placeholder.com/600x400">
+                                    <div class="table-btn-actions align-items-center">
+                                        <form class="ajaxform" action="{{ route('gallery.store') }}" method="post" enctype="multipart/form-data"
+                                            novalidate>
+                                            @csrf
+                                            <input type="file" name="images[]" id="media" multiple />
+                                            <button class="btn btn-primary ajaxbtn" type="submit">Upload</button>
+                                        </form>
+        
+                                        <div>
+                                            <button type="button" class="btn btn-danger deleteBtn">Delete
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="image-info">
-                                        <p>No data found!</p>
+        
+                                    {{-- @include('admin.layouts.components.datafilter', [
+                                    // 'bulk_action_route' => route('admin.media.status'),
+                                    'search_route' => url('admin/media'),
+                                ]) --}}
+        
+                                </div>
+        
+        
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <section id="ajax_container">
+                                            {{-- ajax table  --}}
+                                            @if (count($media) > 0)
+                                                @include('laravel-gallery::item')
+                                            @else
+                                                <div style="text-align: center;">
+                                                    <p>No data found!</p>
+                                                </div>
+                                            @endif
+                                        </section>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="p-4">
+                                            <div class="preview mb-3">
+                                                <img class="preview-img" src="https://via.placeholder.com/600x400">
+                                            </div>
+                                            <div class="image-info">
+                                                <p>No data found!</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+        
                             </div>
                         </div>
-
                     </div>
-                </div>
+                    <!-- /.card -->
+        
+                </section>
             </div>
-            <!-- /.card -->
-
-        </section>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    
-@endsection
+  @endsection
 
-
-@push('scripts')
+  @push('scripts')
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
     <script>
         function success(response, refresh) {
@@ -184,15 +186,9 @@
                 // toast("error", 'No image selected!');
                 return;
             } else {
-                if (confirm("Are you sure you want to delete selected items?") == true) {
+                if (confirm("Are you sure?") == true) {
                     $('.delete_form').submit();
                 }
-            }
-        })
-
-        $(document).on('submit', '#deleteAll', function(e){
-            if (confirm("Are you sure you want to delete all?") !== true) {
-                e.preventDefault();
             }
         })
 
@@ -308,7 +304,8 @@
                 // toast("success", response.msg ?? response);
                 alert(response.msg ?? response)
                 ajaxbtn.html(ajaxbtnhtml);
-                        
+                            
+                //response.refresh contains refresh div id
                 
                 if(typeof success == 'function')  success(response.msg ?? response, response.refresh ?? ''); 
                 
@@ -319,7 +316,12 @@
                 // $(".errorarea").show();
                 $.each(xhr?.responseJSON?.errors, function (key, item) {
                     alert(item)
+                    // toast("error", item);
+                    // $("#errors").html(
+                    //     "<li class='text-danger'>" + item + "</li>"
+                    // );
                 });
+                // errosresponse(xhr, status, error);
             },
         });
     });

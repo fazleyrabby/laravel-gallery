@@ -24,12 +24,12 @@ class LaravelGalleryController extends Controller
 
         $media->appends(['search_query' => $search_query, 'status' => $status]);
 
-        // if ($request->ajax()) {
-        //     if($request->type == 'modal'){
-        //         return view('admin.layouts.components.media-ajax-data', compact('media'));
-        //     }
-        //     return view('admin.media.ajax', compact('media'));
-        // }
+        if ($request->ajax()) {
+            // if($request->type == 'modal'){
+            //     return view('admin.layouts.components.media-ajax-data', compact('media'));
+            // }
+            return view('laravel-gallery::item', compact('media'));
+        }
         // return view('admin.media.index', compact('media'));
         return view('laravel-gallery::index', compact('media'));
     }
@@ -82,7 +82,11 @@ class LaravelGalleryController extends Controller
 
         LaravelGallery::insert($data);
 
-        return redirect()->back()->with('success', 'Successfully Updated!');
+        return response()->json([
+            'msg' => 'Media Successfully Updated!',
+            'refresh' => 'media-container'
+        ]);
+        // return redirect()->back()->with('success', 'Successfully Updated!');
     }
 
     public function tailwind()
@@ -99,13 +103,17 @@ class LaravelGalleryController extends Controller
     {
         $ids = $request->image_ids;
         try {
-            $media = LaravelGallery::whereIn('id', $ids);
-            if ($media->exists()) {
-                foreach ($media->get() as $image) {
-                    deleteFile($image->url);
+            if($request->type =='all'){
+                LaravelGallery::query()->delete();
+            }else{
+                $media = LaravelGallery::whereIn('id', $ids);
+                if ($media->exists()) {
+                    foreach ($media->get() as $image) {
+                        deleteFile($image->url);
+                    }
                 }
+                $media->delete();
             }
-            $media->delete();
             $status = "success";
             $message = "Media files successfully deleted";
         } catch (\Illuminate\Database\QueryException $ex) {

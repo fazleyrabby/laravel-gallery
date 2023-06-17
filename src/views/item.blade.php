@@ -1,4 +1,5 @@
-<style>
+@push('style')
+  <style>
     .card.options{
       position: absolute;
       left: 5%;
@@ -9,6 +10,7 @@
       box-shadow: box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; !important;
     }
   </style>
+@endpush
 
 <div class="card-body" id="ajaxTable">
   <form class="delete_form" action="{{ route('gallery.delete') }}" method="post">
