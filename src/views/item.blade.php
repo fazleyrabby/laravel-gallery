@@ -19,10 +19,10 @@
     @foreach ($media as $image)
     <div class="col-6 col-sm-2 imgcontainer" data-download-url="{{ route('gallery.download') . '?url=' . $image->url }}">
       <label class="imagecheck mb-2">
-        <input type="checkbox" name="image_ids[]" value="{{ $image->id }}" class="imagecheck-input">
-        <figure class="imagecheck-figure">
-          <img src="{{ Storage::url($image->url) }}" alt="}" class="imagecheck-image">
-        </figure>
+        <input type="checkbox" name="{{ request()->modal_type == 'single' ? 'image_ids' : 'image_ids[]' }}" value="{{ $image->id }}" class="imagecheck-input" data-type="{{ request()->modal_type }}"  data-url="{{ Storage::url($image->url) }}">
+          <figure class="imagecheck-figure">
+            <img src="{{ Storage::url($image->url) }}" alt="{{ basename($image->url) }}" class="imagecheck-image">
+          </figure>
       </label>
       <span class="view btn btn-primary" 
       data-created-at="{{ Carbon\Carbon::parse($image->created_at)->isoFormat('LLL') }}"
@@ -32,12 +32,9 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
-      
-      {{-- <i class="fa fa-eye"></i> --}}
       </span>
-      {{-- <a href="{{ route("admin.media.download") .'?url='. $image->url }}" target="_blank">Download</a> --}}
     </div>
-    @endforeach
+      @endforeach
   </div>
 </form>
   {{-- <div class="row">

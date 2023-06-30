@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css') }}">
     <link rel="stylesheet" href="{{ asset('https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/panzoom.css') }}">
     <style>
+        
         .imagecheck {
             position: relative;
         }

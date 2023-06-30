@@ -16,16 +16,18 @@ class LaravelGalleryController extends Controller
     {
         $search_query = $request->search_query;
         $status = 'active';
-        $paginateItems = 20;
+        $paginateItems = 1;
         $media = LaravelGallery::getImages($search_query, $status, $paginateItems);
         if ($request->ajax()) {
             // if($request->type == 'modal'){
-            //     return view('admin.layouts.components.media-ajax-data', compact('media'));
+            //     return view('laravel-gallery::item', compact('media'));
             // }
-            return view('laravel-gallery::item', compact('media'));
+            // echo $media->currentPage . $media->lastPage;
+            if($media->currentPage() > $media->lastPage()) return;
+            return view('laravel-gallery::layouts.ajax', compact('media'));
         }
         // return view('admin.media.index', compact('media'));
-        return view('laravel-gallery::index', compact('media'));
+        return view('laravel-gallery::modal', compact('media'));
     }
 
         /**

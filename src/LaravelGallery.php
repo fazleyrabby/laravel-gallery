@@ -42,7 +42,6 @@ class LaravelGallery extends Eloquent{
         }
     }
 
-
     public static function getImages($search_query, $status, $paginate=15){
         $media = self::select('id', 'url', 'created_at', 'status')
             ->where('url', 'like', '%' . $search_query . '%')
